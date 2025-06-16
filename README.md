@@ -25,15 +25,16 @@ Usar el fichero embalses_insomnia.yaml para importar la coleccion y poder testea
 
 ## MongoDB
 
-Si alguien quiere levantar el mongodb para hacer pruebas con un repository y conectarlo al modelo de embalse:
+Si alguien quiere levantar el mongodb para hacer pruebas con un repository y conectarlo al modelo de embalse.
+Primero instalar MongoDB desktop: [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/)
 
-Para arrancar en segundo plano
+Para arrancar Mongo en segundo plano:
 
 ```bash
 docker-compose up -d
 ```
 
-Para parar el servicio
+Para parar el servicio de Mongo:
 
 ```bash
 docker-compose down
