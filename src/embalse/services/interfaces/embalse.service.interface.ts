@@ -1,11 +1,8 @@
-import { CreateEmbalseDto } from '../../dto/create-embalse.dto';
-import { UpdateEmbalseDto } from '../../dto/update-embalse.dto';
-
-export interface IEmbalseService {
-  create(dto: CreateEmbalseDto): any;
-  findAll(): any;
-  findOne(id: string): any;
-  update(id: string, dto: UpdateEmbalseDto): any;
-  replace(id: string, dto: CreateEmbalseDto): any;
-  delete(id: string): any;
+export abstract class EmbalseService {
+  abstract create(...args: any[]): any;
+  abstract findAll(): any;
+  abstract findOne(id: string): any;
+  abstract update(id: string, dto: any): any;
+  abstract replace(id: string, dto: any): any;
+  abstract delete(id: string): any;
 }

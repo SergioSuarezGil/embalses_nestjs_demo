@@ -5,12 +5,12 @@ import { EmbalseController } from './embalse.controller';
 import { Embalse, EmbalseSchema } from './schemas/embalse.schema';
 import { EmbalseMemoryService } from './services/embalse.memory.service';
 import { EmbalseMongoService } from './services/embalse.repository.service';
-import { IEmbalseService } from './services/interfaces/embalse.service.interface';
+import { EmbalseService } from './services/interfaces/embalse.service.interface';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Embalse.name, schema: EmbalseSchema }]),
     ConfigModule,
+    MongooseModule.forFeature([{ name: Embalse.name, schema: EmbalseSchema }]),
   ],
   controllers: [EmbalseController],
   providers: [
@@ -20,13 +20,13 @@ import { IEmbalseService } from './services/interfaces/embalse.service.interface
       provide: 'EmbalseService',
       useFactory: (
         configService: ConfigService,
-        mongoService: EmbalseMongoService,
         memoryService: EmbalseMemoryService,
-      ): IEmbalseService => {
+        mongoService: EmbalseMongoService,
+      ): EmbalseService => {
         const useMongo = configService.get('USE_MONGO') === 'true';
         return useMongo ? mongoService : memoryService;
       },
-      inject: [ConfigService, EmbalseMongoService, EmbalseMemoryService],
+      inject: [ConfigService, EmbalseMemoryService, EmbalseMongoService],
     },
   ],
 })

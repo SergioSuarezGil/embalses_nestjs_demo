@@ -1,14 +1,14 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Embalse } from '../schemas/embalse.schema';
-import { IEmbalseService } from './interfaces/embalse.service.interface';
+import { EmbalseService } from './interfaces/embalse.service.interface';
 import { CreateEmbalseDto } from '../dto/create-embalse.dto';
 import { UpdateEmbalseDto } from '../dto/update-embalse.dto';
 import { embalsesMock } from '../mocks/embalses.mock';
 
 @Injectable()
-export class EmbalseMongoService implements IEmbalseService, OnModuleInit {
+export class EmbalseMongoService implements EmbalseService, OnModuleInit {
   private readonly logger = new Logger('EmbalseMongoService');
 
   constructor(@InjectModel(Embalse.name) private model: Model<Embalse>) {}
@@ -21,6 +21,10 @@ export class EmbalseMongoService implements IEmbalseService, OnModuleInit {
     }
   }
 
+  private parseId(id: string) {
+    return Types.ObjectId.isValid(id) ? new Types.ObjectId(id) : null;
+  }
+
   create(dto: CreateEmbalseDto) {
     return this.model.create(dto);
   }
@@ -29,19 +33,29 @@ export class EmbalseMongoService implements IEmbalseService, OnModuleInit {
     return this.model.find().exec();
   }
 
-  findOne(id: string) {
-    return this.model.findById(id).exec();
+  async findOne(id: string) {
+    const parsedId = this.parseId(id);
+    if (!parsedId) return null;
+    return this.model.findById(parsedId).exec();
   }
 
-  update(id: string, dto: UpdateEmbalseDto) {
-    return this.model.findByIdAndUpdate(id, dto, { new: true }).exec();
+  async update(id: string, dto: UpdateEmbalseDto) {
+    const parsedId = this.parseId(id);
+    if (!parsedId) return null;
+    return this.model.findByIdAndUpdate(parsedId, dto, { new: true }).exec();
   }
 
-  replace(id: string, dto: CreateEmbalseDto) {
-    return this.model.findOneAndReplace({ _id: id }, dto, { new: true }).exec();
+  async replace(id: string, dto: CreateEmbalseDto) {
+    const parsedId = this.parseId(id);
+    if (!parsedId) return null;
+    return this.model
+      .findOneAndReplace({ _id: parsedId }, dto, { new: true })
+      .exec();
   }
 
-  delete(id: string) {
-    return this.model.findByIdAndDelete(id).exec();
+  async delete(id: string) {
+    const parsedId = this.parseId(id);
+    if (!parsedId) return null;
+    return this.model.findByIdAndDelete(parsedId).exec();
   }
 }

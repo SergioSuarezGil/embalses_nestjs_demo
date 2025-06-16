@@ -10,7 +10,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { IEmbalseService } from './services/interfaces/embalse.service.interface';
+import { EmbalseService } from './services/interfaces/embalse.service.interface';
 import { CreateEmbalseDto } from './dto/create-embalse.dto';
 import { UpdateEmbalseDto } from './dto/update-embalse.dto';
 
@@ -18,7 +18,7 @@ import { UpdateEmbalseDto } from './dto/update-embalse.dto';
 export class EmbalseController {
   constructor(
     @Inject('EmbalseService')
-    private readonly embalseService: IEmbalseService,
+    private readonly embalseService: EmbalseService,
   ) {}
 
   @Post()
