@@ -1,33 +1,55 @@
-import { Module } from '@nestjs/common';
+import { DynamicModule, Module, Provider } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EmbalseController } from './embalse.controller';
-import { Embalse, EmbalseSchema } from './schemas/embalse.schema';
 import { EmbalseMemoryService } from './services/embalse.memory.service';
 import { EmbalseMongoService } from './services/embalse.repository.service';
 import { EmbalseService } from './services/interfaces/embalse.service.interface';
+import { Embalse, EmbalseSchema } from './schemas/embalse.schema';
 
-@Module({
-  imports: [
-    ConfigModule,
-    MongooseModule.forFeature([{ name: Embalse.name, schema: EmbalseSchema }]),
-  ],
-  controllers: [EmbalseController],
-  providers: [
-    EmbalseMemoryService,
-    EmbalseMongoService,
-    {
-      provide: 'EmbalseService',
-      useFactory: (
-        configService: ConfigService,
-        memoryService: EmbalseMemoryService,
-        mongoService: EmbalseMongoService,
-      ): EmbalseService => {
-        const useMongo = configService.get('USE_MONGO') === 'true';
-        return useMongo ? mongoService : memoryService;
+@Module({})
+export class EmbalseModule {
+  static register(): DynamicModule {
+    const useMongo = process.env.USE_MONGO === 'true';
+
+    const imports = [
+      ConfigModule,
+      ...(useMongo
+        ? [
+            MongooseModule.forFeature([
+              { name: Embalse.name, schema: EmbalseSchema },
+            ]),
+          ]
+        : []),
+    ];
+
+    const providers: Provider[] = [
+      EmbalseMemoryService,
+      ...(useMongo ? [EmbalseMongoService] : []),
+      {
+        provide: EmbalseService,
+        useFactory: (
+          configService: ConfigService,
+          memoryService: EmbalseMemoryService,
+          mongoService?: EmbalseMongoService,
+        ) => {
+          return configService.get('USE_MONGO') === 'true'
+            ? mongoService!
+            : memoryService;
+        },
+        inject: [
+          ConfigService,
+          EmbalseMemoryService,
+          ...(useMongo ? [EmbalseMongoService] : []),
+        ],
       },
-      inject: [ConfigService, EmbalseMemoryService, EmbalseMongoService],
-    },
-  ],
-})
-export class EmbalseModule {}
+    ];
+
+    return {
+      module: EmbalseModule,
+      imports,
+      controllers: [EmbalseController],
+      providers,
+    };
+  }
+}

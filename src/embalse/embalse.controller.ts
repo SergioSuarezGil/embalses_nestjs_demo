@@ -16,10 +16,7 @@ import { UpdateEmbalseDto } from './dto/update-embalse.dto';
 
 @Controller('embalses')
 export class EmbalseController {
-  constructor(
-    @Inject('EmbalseService')
-    private readonly embalseService: EmbalseService,
-  ) {}
+  constructor(private readonly embalseService: EmbalseService) {}
 
   @Post()
   create(@Body() dto: CreateEmbalseDto) {
