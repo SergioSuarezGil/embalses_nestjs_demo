@@ -3,34 +3,33 @@ import {
   Controller,
   Delete,
   Get,
-  Inject,
   NotFoundException,
   Param,
   Patch,
   Post,
   Put,
 } from '@nestjs/common';
-import { EmbalseService } from './services/interfaces/embalse.service.interface';
+import { Repository } from '../common/interfaces/repository.interface';
 import { CreateEmbalseDto } from './dto/create-embalse.dto';
 import { UpdateEmbalseDto } from './dto/update-embalse.dto';
 
 @Controller('embalses')
 export class EmbalseController {
-  constructor(private readonly embalseService: EmbalseService) {}
+  constructor(private readonly embalseRepository: Repository) {}
 
   @Post()
   create(@Body() dto: CreateEmbalseDto) {
-    return this.embalseService.create(dto);
+    return this.embalseRepository.create(dto);
   }
 
   @Get()
   findAll() {
-    return this.embalseService.findAll();
+    return this.embalseRepository.findAll();
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const embalse = await this.embalseService.findOne(id);
+    const embalse = await this.embalseRepository.findOne(id);
     if (!embalse) {
       throw new NotFoundException(`Reservoir with id ${id} not found`);
     }
@@ -39,7 +38,7 @@ export class EmbalseController {
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() dto: UpdateEmbalseDto) {
-    const updated = await this.embalseService.update(id, dto);
+    const updated = await this.embalseRepository.update(id, dto);
     if (!updated) {
       throw new NotFoundException(`Reservoir with id ${id} not found`);
     }
@@ -48,7 +47,7 @@ export class EmbalseController {
 
   @Put(':id')
   async replace(@Param('id') id: string, @Body() dto: CreateEmbalseDto) {
-    const replaced = await this.embalseService.replace(id, dto);
+    const replaced = await this.embalseRepository.replace(id, dto);
     if (!replaced) {
       throw new NotFoundException(`Reservoir with id ${id} not found`);
     }
@@ -57,7 +56,7 @@ export class EmbalseController {
 
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    const deleted = await this.embalseService.delete(id);
+    const deleted = await this.embalseRepository.delete(id);
     if (!deleted) {
       throw new NotFoundException(`Reservoir with id ${id} not found`);
     }

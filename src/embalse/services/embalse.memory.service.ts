@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { EmbalseService } from './interfaces/embalse.service.interface';
+import { Repository } from '../../common/interfaces/repository.interface';
 import { CreateEmbalseDto } from '../dto/create-embalse.dto';
 import { UpdateEmbalseDto } from '../dto/update-embalse.dto';
-import { embalsesMock } from '../mocks/embalses.mock';
+import { embalsesMock } from '../../common/mocks/embalses.mock';
 
 @Injectable()
-export class EmbalseMemoryService implements EmbalseService {
+export class EmbalseMemoryService implements Repository {
   private embalses = new Map<string, any>();
 
   constructor() {

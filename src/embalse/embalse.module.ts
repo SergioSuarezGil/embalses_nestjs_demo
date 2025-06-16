@@ -1,55 +1,49 @@
-import { DynamicModule, Module, Provider } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EmbalseController } from './embalse.controller';
 import { EmbalseMemoryService } from './services/embalse.memory.service';
 import { EmbalseMongoService } from './services/embalse.repository.service';
-import { EmbalseService } from './services/interfaces/embalse.service.interface';
+import { Repository } from '../common/interfaces/repository.interface';
 import { Embalse, EmbalseSchema } from './schemas/embalse.schema';
 
 @Module({})
 export class EmbalseModule {
-  static register(): DynamicModule {
-    const useMongo = process.env.USE_MONGO === 'true';
+  static register(useMongo: boolean): DynamicModule {
+    const mongoUri = process.env.MONGO_URI || '';
 
-    const imports = [
-      ConfigModule,
-      ...(useMongo
-        ? [
-            MongooseModule.forFeature([
-              { name: Embalse.name, schema: EmbalseSchema },
-            ]),
-          ]
-        : []),
-    ];
+    const mongoImports = useMongo
+      ? [
+          MongooseModule.forRoot(mongoUri, {
+            connectTimeoutMS: 5000,
+            serverSelectionTimeoutMS: 5000,
+          }),
+          MongooseModule.forFeature([
+            { name: Embalse.name, schema: EmbalseSchema },
+          ]),
+        ]
+      : [];
 
-    const providers: Provider[] = [
-      EmbalseMemoryService,
-      ...(useMongo ? [EmbalseMongoService] : []),
-      {
-        provide: EmbalseService,
-        useFactory: (
-          configService: ConfigService,
-          memoryService: EmbalseMemoryService,
-          mongoService?: EmbalseMongoService,
-        ) => {
-          return configService.get('USE_MONGO') === 'true'
-            ? mongoService!
-            : memoryService;
-        },
-        inject: [
-          ConfigService,
-          EmbalseMemoryService,
-          ...(useMongo ? [EmbalseMongoService] : []),
-        ],
-      },
-    ];
+    const mongoProviders = useMongo ? [EmbalseMongoService] : [];
 
     return {
       module: EmbalseModule,
-      imports,
+      imports: [...mongoImports], // <-- ya no hace falta ConfigModule si no lo usas
       controllers: [EmbalseController],
-      providers,
+      providers: [
+        EmbalseMemoryService,
+        ...mongoProviders,
+        {
+          provide: Repository,
+          useFactory: (
+            memoryService: EmbalseMemoryService,
+            mongoService?: EmbalseMongoService,
+          ) => (useMongo ? mongoService! : memoryService),
+          inject: [
+            EmbalseMemoryService,
+            ...(useMongo ? [EmbalseMongoService] : []),
+          ],
+        },
+      ],
     };
   }
 }

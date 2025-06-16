@@ -1,4 +1,4 @@
-export abstract class EmbalseService {
+export abstract class Repository {
   abstract create(...args: any[]): any;
   abstract findAll(): any;
   abstract findOne(id: string): any;
