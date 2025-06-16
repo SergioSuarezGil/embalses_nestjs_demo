@@ -21,7 +21,11 @@ function getMongoModule(): DynamicModule[] {
   const uri = process.env.MONGO_URI;
 
   if (useMongo && uri?.startsWith('mongodb')) {
-    return [MongooseModule.forRoot(uri)];
+    return [
+      MongooseModule.forRoot(uri, {
+        serverSelectionTimeoutMS: 5000,
+      }),
+    ];
   }
 
   return [];
