@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { Repository } from '../../../common/interfaces/repository.interface';
+import { Repository } from '../../../common/classes/repository.class';
 import { CreateEmbalseDto } from '../dto/create-embalse.dto';
 import { UpdateEmbalseDto } from '../dto/update-embalse.dto';
 import { embalsesMock } from '../../../common/mocks/embalses.mock';
+import { IEmbalse } from '../interfaces/embalse.interface';
 
 @Injectable()
-export class EmbalseMemoryService implements Repository {
-  private embalses = new Map<string, any>();
+export class EmbalseMemoryService implements Repository<IEmbalse> {
+  private embalses = new Map<string, IEmbalse>();
 
   constructor() {
     embalsesMock.forEach((dto) => {
@@ -15,38 +16,43 @@ export class EmbalseMemoryService implements Repository {
       this.embalses.set(id, { id, ...dto });
     });
   }
-
-  create(dto: CreateEmbalseDto) {
+  async create(dto: CreateEmbalseDto): Promise<IEmbalse> {
     const id = randomUUID();
-    const newEmbalse = { id, ...dto };
+    const newEmbalse: IEmbalse = { id, ...dto };
     this.embalses.set(id, newEmbalse);
     return newEmbalse;
   }
 
-  findAll() {
+  async findAll(): Promise<IEmbalse[]> {
     return Array.from(this.embalses.values());
   }
 
-  findOne(id: string) {
+  async findOne(id: string): Promise<IEmbalse | null> {
     return this.embalses.get(id) ?? null;
   }
 
-  update(id: string, dto: UpdateEmbalseDto) {
+  async update(
+    id: string,
+    dto: UpdateEmbalseDto,
+  ): Promise<IEmbalse | null> {
     const existing = this.embalses.get(id);
     if (!existing) return null;
-    const updated = { ...existing, ...dto };
+    const updated: IEmbalse = { ...existing, ...dto };
     this.embalses.set(id, updated);
     return updated;
   }
 
-  replace(id: string, dto: CreateEmbalseDto) {
+  async replace(
+    id: string,
+    dto: CreateEmbalseDto,
+  ): Promise<IEmbalse | null> {
     if (!this.embalses.has(id)) return null;
-    const newEmbalse = { id, ...dto };
+    const newEmbalse: IEmbalse = { id, ...dto };
     this.embalses.set(id, newEmbalse);
     return newEmbalse;
   }
 
-  delete(id: string) {
+  async delete(id: string): Promise<IEmbalse | null> {
     const embalse = this.embalses.get(id);
     if (!embalse) return null;
     this.embalses.delete(id);

@@ -1,10 +1,10 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { Repository } from '../../common/interfaces/repository.interface';
+import { Repository } from '../../common/classes/repository.class';
 import { EmbalseController } from './embalse.controller';
 import { EmbalseMemoryService } from './services/embalse.memory.service';
-import { EmbalseMongoService } from './services/embalse.repository.service';
+import { EmbalseDatabaseService } from './services/embalse.database.service';
 import { Embalse, EmbalseSchema } from './schemas/embalse.schema';
 
 @Module({})
@@ -24,7 +24,7 @@ export class EmbalseModule {
         ]
       : [];
 
-    const mongoProviders = useMongo ? [EmbalseMongoService] : [];
+    const mongoProviders = useMongo ? [EmbalseDatabaseService] : [];
 
     return {
       module: EmbalseModule,
@@ -37,11 +37,11 @@ export class EmbalseModule {
           provide: Repository,
           useFactory: (
             memoryService: EmbalseMemoryService,
-            mongoService?: EmbalseMongoService,
+            mongoService?: EmbalseDatabaseService,
           ) => (useMongo ? mongoService! : memoryService),
           inject: [
             EmbalseMemoryService,
-            ...(useMongo ? [EmbalseMongoService] : []),
+            ...(useMongo ? [EmbalseDatabaseService] : []),
           ],
         },
       ],
