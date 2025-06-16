@@ -2,10 +2,10 @@ import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Embalse } from '../schemas/embalse.schema';
-import { Repository } from '../../common/interfaces/repository.interface';
+import { Repository } from '../../../common/interfaces/repository.interface';
 import { CreateEmbalseDto } from '../dto/create-embalse.dto';
 import { UpdateEmbalseDto } from '../dto/update-embalse.dto';
-import { embalsesMock } from '../../common/mocks/embalses.mock';
+import { embalsesMock } from '../../../common/mocks/embalses.mock';
 
 @Injectable()
 export class EmbalseMongoService implements Repository, OnModuleInit {

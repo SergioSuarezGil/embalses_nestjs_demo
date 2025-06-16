@@ -9,7 +9,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { Repository } from '../common/interfaces/repository.interface';
+import { Repository } from '../../common/interfaces/repository.interface';
 import { CreateEmbalseDto } from './dto/create-embalse.dto';
 import { UpdateEmbalseDto } from './dto/update-embalse.dto';
 

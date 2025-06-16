@@ -1,9 +1,10 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+
+import { Repository } from '../../common/interfaces/repository.interface';
 import { EmbalseController } from './embalse.controller';
 import { EmbalseMemoryService } from './services/embalse.memory.service';
 import { EmbalseMongoService } from './services/embalse.repository.service';
-import { Repository } from '../common/interfaces/repository.interface';
 import { Embalse, EmbalseSchema } from './schemas/embalse.schema';
 
 @Module({})
@@ -27,7 +28,7 @@ export class EmbalseModule {
 
     return {
       module: EmbalseModule,
-      imports: [...mongoImports], // <-- ya no hace falta ConfigModule si no lo usas
+      imports: [...mongoImports],
       controllers: [EmbalseController],
       providers: [
         EmbalseMemoryService,

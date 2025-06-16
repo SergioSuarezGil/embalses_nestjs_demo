@@ -1,4 +1,4 @@
-import { CreateEmbalseDto } from '../../embalse/dto/create-embalse.dto';
+import { CreateEmbalseDto } from '../../modules/embalse/dto/create-embalse.dto';
 
 export const embalsesMock: CreateEmbalseDto[] = [
   { nombre: 'La Serena', capacidad: 3210000, provincia: 'Badajoz' },
