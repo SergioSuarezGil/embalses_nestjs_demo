@@ -31,10 +31,7 @@ export class EmbalseMemoryService implements Repository<IEmbalse> {
     return this.embalses.get(id) ?? null;
   }
 
-  async update(
-    id: string,
-    dto: UpdateEmbalseDto,
-  ): Promise<IEmbalse | null> {
+  async update(id: string, dto: UpdateEmbalseDto): Promise<IEmbalse | null> {
     const existing = this.embalses.get(id);
     if (!existing) return null;
     const updated: IEmbalse = { ...existing, ...dto };
@@ -42,10 +39,7 @@ export class EmbalseMemoryService implements Repository<IEmbalse> {
     return updated;
   }
 
-  async replace(
-    id: string,
-    dto: CreateEmbalseDto,
-  ): Promise<IEmbalse | null> {
+  async replace(id: string, dto: CreateEmbalseDto): Promise<IEmbalse | null> {
     if (!this.embalses.has(id)) return null;
     const newEmbalse: IEmbalse = { id, ...dto };
     this.embalses.set(id, newEmbalse);
