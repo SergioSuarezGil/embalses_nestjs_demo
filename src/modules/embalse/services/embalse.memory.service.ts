@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto';
 import { Repository } from '../../../common/classes/repository.class';
 import { CreateEmbalseDto } from '../dto/create-embalse.dto';
 import { UpdateEmbalseDto } from '../dto/update-embalse.dto';
-import { embalsesMock } from '../../../common/mocks/embalses.mock';
+import { embalsesMock } from '../mocks/embalses.mock';
 import { IEmbalse } from '../interfaces/embalse.interface';
 
 @Injectable()
