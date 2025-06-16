@@ -1,32 +1,33 @@
-import { Module, Provider } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EmbalseController } from './embalse.controller';
+import { Embalse, EmbalseSchema } from './schemas/embalse.schema';
 import { EmbalseMemoryService } from './services/embalse.memory.service';
 import { EmbalseMongoService } from './services/embalse.repository.service';
-import { Embalse, EmbalseSchema } from './schemas/embalse.schema';
-
-const embalseServiceProvider: Provider = {
-  provide: 'EmbalseService',
-  inject: [ConfigService, EmbalseMongoService],
-  useFactory: (
-    configService: ConfigService,
-    mongoService: EmbalseMongoService,
-  ) => {
-    const useMongo = configService.get<string>('USE_MONGO') === 'true';
-    return useMongo ? mongoService : new EmbalseMemoryService();
-  },
-};
+import { IEmbalseService } from './services/interfaces/embalse.service.interface';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Embalse.name, schema: EmbalseSchema }]),
+    ConfigModule,
   ],
   controllers: [EmbalseController],
   providers: [
-    embalseServiceProvider,
-    EmbalseMongoService,
     EmbalseMemoryService,
+    EmbalseMongoService,
+    {
+      provide: 'EmbalseService',
+      useFactory: (
+        configService: ConfigService,
+        mongoService: EmbalseMongoService,
+        memoryService: EmbalseMemoryService,
+      ): IEmbalseService => {
+        const useMongo = configService.get('USE_MONGO') === 'true';
+        return useMongo ? mongoService : memoryService;
+      },
+      inject: [ConfigService, EmbalseMongoService, EmbalseMemoryService],
+    },
   ],
 })
 export class EmbalseModule {}
