@@ -1,0 +1,201 @@
+type: collection.insomnia.rest/5.0
+name: Embalses API Demo
+meta:
+  id: wrk_ce348aadc63e4e24b99d818edcbfe72e
+  created: 1750101215536
+  modified: 1750101215536
+  description: ""
+collection:
+  - name: Embalses API Demo
+    meta:
+      id: fld_9b7de1b24b3f4b05b876e37a39c77054
+      created: 1750101215537
+      modified: 1750101215537
+      sortKey: -1750101214114
+      description: ""
+    children:
+      - url: http://localhost:3000/embalses
+        name: GET all embalses
+        meta:
+          id: req_02431fb5444242d285467135aeead1d6
+          created: 1750101215543
+          modified: 1750101215543
+          isPrivate: false
+          description: ""
+          sortKey: -1750101214113
+        method: GET
+        scripts:
+          preRequest: ""
+          afterResponse: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/embalses/d9c05e28-b900-4b4e-81e3-b3337ed5e060
+        name: GET one embalse
+        meta:
+          id: req_5ad6ce88ebed4d1c8aaf64ba0f2ba3c5
+          created: 1750101215545
+          modified: 1750101764551
+          isPrivate: false
+          description: ""
+          sortKey: -1750101214112
+        method: GET
+        parameters:
+          - id: pair_67e4176a14cc4513a79fe558cedcdd65
+            name: ""
+            value: ""
+            description: ""
+            disabled: true
+        scripts:
+          preRequest: ""
+          afterResponse: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/embalses
+        name: POST create embalse
+        meta:
+          id: req_210ccf4e5cb4401ca7663fc4b8ce9616
+          created: 1750101215546
+          modified: 1750101782212
+          isPrivate: false
+          description: ""
+          sortKey: -1750101214111
+        method: POST
+        body:
+          mimeType: text/plain
+          text: |-
+            {
+              "nombre": "Embalse nuevo",
+              "capacidad": 123456,
+              "provincia": "León"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        scripts:
+          preRequest: ""
+          afterResponse: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/embalses/12f70caf-547e-47dc-a209-23b77577c1d4
+        name: PATCH update embalse
+        meta:
+          id: req_06e06edbb2024ddc9b1fa214005e754b
+          created: 1750101215547
+          modified: 1750101450853
+          isPrivate: false
+          description: ""
+          sortKey: -1750101214110
+        method: PATCH
+        body:
+          mimeType: text/plain
+          text: |-
+            {
+              "capacidad": 987654
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        scripts:
+          preRequest: ""
+          afterResponse: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/embalses/15935e42-ba33-4b80-89a5-823974542f9aa
+        name: DELETE embalse
+        meta:
+          id: req_834ee1d11f1a45c58fc1cb89c3571d00
+          created: 1750101215547
+          modified: 1750101755461
+          isPrivate: false
+          description: ""
+          sortKey: -1750101214108
+        method: DELETE
+        parameters:
+          - id: pair_a46418126fb94dddac88257ad51c9ca4
+            name: id
+            value: 12f70caf-547e-47dc-a209-23b77577c1d4
+            description: ""
+            disabled: false
+        scripts:
+          preRequest: ""
+          afterResponse: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/embalses/15935e42-ba33-4b80-89a5-823974542f9e
+        name: PUT replace embalse
+        meta:
+          id: req_ef156f7eab30426782f932fbe722b026
+          created: 1750101215547
+          modified: 1750101648583
+          isPrivate: false
+          description: ""
+          sortKey: -1750101214109
+        method: PUT
+        body:
+          mimeType: text/plain
+          text: |-
+            {
+              "nombre": "Embalse reemplazado",
+              "capacidad": 999999,
+              "provincia": "Madrid"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        scripts:
+          preRequest: ""
+          afterResponse: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+    scripts:
+      afterResponse: ""
+      preRequest: ""
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_f2e2fcb15b3068b8cc3a15173dc587f0763dbf40
+    created: 1750101220005
+    modified: 1750101220005
+environments:
+  name: Base Environment
+  meta:
+    id: env_f2e2fcb15b3068b8cc3a15173dc587f0763dbf40
+    created: 1750101220000
+    modified: 1750101220000
+    isPrivate: false
